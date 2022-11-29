@@ -90,7 +90,7 @@ class ChatServer(RedisService):
                 if message:
                     data = json.loads(message.get("data"))
                     chat_message = ChatMessage(**data)
-                    await self.ws.send_text(f"[{chat_message.time}] {chat_message.message} ({chat_message.client_id})")
+                    await self.ws.send_text(f"[{chat_message.time}] ({chat_message.client_id}) {chat_message.message}")
         except Exception as e:
             logger.error(e)
 
