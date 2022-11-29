@@ -1,22 +1,24 @@
 steps:
  # Build the container image
  - name: 'gcr.io/cloud-builders/docker'
-   args: ['build', '-t', 'gcr.io/evb-cloudrun-scratch/frontend:$COMMIT_SHA', '.']
+   args: ['build', '-t', 'gcr.io/evb-cloudrun-scratch/backend:$COMMIT_SHA', '.']
  # Push the container image to Container Registry
  - name: 'gcr.io/cloud-builders/docker'
-   args: ['push', 'gcr.io/evb-cloudrun-scratch/frontend:$COMMIT_SHA']
+   args: ['push', 'gcr.io/evb-cloudrun-scratch/backend:$COMMIT_SHA']
  # Deploy container image to Cloud Run
  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
    entrypoint: gcloud
    args:
    - 'run'
    - 'deploy'
-   - 'frontend'
+   - 'backend'
    - '--image'
-   - 'gcr.io/evb-cloudrun-scratch/frontend:$COMMIT_SHA'
+   - 'gcr.io/evb-cloudrun-scratch/backend:$COMMIT_SHA'
    - '--region'
-   - 'us-central1-a'
+   - 'us-central1'
    - '--port'
-   - '80'
+   - '8000'
+   - '--update-env-vars'
+   - 'REDIS_HOST=redis://10.143.3.240/29
  images:
- - 'gcr.io/evb-cloudrun-scratch/frontend:$COMMIT_SHA'
+ - 'gcr.io/evb-cloudrun-scratch/backend:$COMMIT_SHA'
